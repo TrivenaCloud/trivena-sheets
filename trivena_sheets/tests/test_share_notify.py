@@ -1,0 +1,116 @@
+# Copyright (c) 2026, Asif and Contributors
+# See license.txt
+"""Custom share notification — branded subject + SPA link.
+
+The previous flow piped recipient notifications through Frappe's
+generic share path, which rendered as "Asif shared a document Sheet
+'Title' with you" and pointed the click destination at the Desk form
+view of the Sheet doctype (a raw JSON blob, not the SPA). These tests
+pin the new behaviour: pass notify=False to trivena.share.add so the
+generic one doesn't fire, then dispatch our own Notification Log + an
+email body whose link routes to /sheets?id=…
+"""
+
+from __future__ import annotations
+
+import unittest
+from unittest import mock
+
+
+class CustomShareNotification(unittest.TestCase):
+    def setUp(self):
+        patcher = mock.patch("sheets.api.frappe")
+        self.frappe = patcher.start()
+        self.addCleanup(patcher.stop)
+        self.trivena.session.user = "alice@example.com"
+        self.trivena.has_permission.return_value = True
+        # Recipient lookup (`enabled` check) — return 1 so share proceeds.
+        self.trivena.db.get_value.side_effect = lambda dt, name, field=None: {
+            ("User", "bob@example.com", "enabled"):  1,
+            ("User", "alice@example.com", "full_name"): "Alice",
+        }.get((dt, name, field))
+        # trivena.get_doc("Sheet", name) → mock title
+        sheet_doc = mock.Mock()
+        sheet_doc.title = "Q3 Forecast"
+        # Notification Log creation also goes through get_doc; route that
+        # to a fresh Mock so we can inspect what was inserted.
+        self.notification_payload = {}
+
+        def _get_doc_dispatch(*args, **kwargs):
+            if args and args[0] == "Sheet":
+                return sheet_doc
+            # Inserting a Notification Log: dict payload.
+            if args and isinstance(args[0], dict):
+                self.notification_payload.update(args[0])
+                m = mock.Mock()
+                m.insert = mock.Mock()
+                return m
+            return mock.Mock()
+
+        self.trivena.get_doc.side_effect = _get_doc_dispatch
+        self.trivena.utils.get_url.return_value = "https://test.example"
+        self.trivena.utils.escape_html.side_effect = lambda s: s
+
+    def test_share_uses_notify_false_so_frappe_default_does_not_fire(self):
+        from trivena_sheets import api
+
+        api.share_sheet("SH-1", "bob@example.com", write=0)
+        # The first positional+keyword arg combo to share.add carries
+        # notify — assert it's explicitly False so the generic
+        # "shared a document Sheet …" notification never fires.
+        kwargs = self.trivena.share.add.call_args.kwargs
+        self.assertEqual(kwargs.get("notify"), False)
+
+    def test_in_app_notification_has_branded_subject_with_title(self):
+        from trivena_sheets import api
+
+        api.share_sheet("SH-1", "bob@example.com", write=0)
+        self.assertIn("Q3 Forecast", self.notification_payload.get("subject", ""))
+        self.assertIn("sheet", self.notification_payload.get("subject", "").lower())
+        self.assertEqual(self.notification_payload["for_user"], "bob@example.com")
+        self.assertEqual(self.notification_payload["from_user"], "alice@example.com")
+
+    def test_role_text_reflects_write_permission(self):
+        from trivena_sheets import api
+
+        api.share_sheet("SH-1", "bob@example.com", write=0)
+        self.assertIn("can view", self.notification_payload["subject"])
+        self.notification_payload.clear()
+
+        api.share_sheet("SH-1", "bob@example.com", write=1)
+        self.assertIn("can edit", self.notification_payload["subject"])
+
+    def test_email_body_links_to_the_spa_not_the_desk(self):
+        from trivena_sheets import api
+
+        api.share_sheet("SH-1", "bob@example.com", write=0)
+        kwargs = self.trivena.sendmail.call_args.kwargs
+        message = kwargs.get("message", "")
+        # The link must go to the SPA route, not /app/sheet/<hash>.
+        self.assertIn("/sheets?id=SH-1", message)
+        self.assertNotIn("/app/sheet/", message)
+        # Recipient and queue posture
+        self.assertEqual(kwargs.get("recipients"), ["bob@example.com"])
+        self.assertEqual(kwargs.get("now"), False)
+
+    def test_notification_failure_does_not_rollback_the_share(self):
+        # If trivena.sendmail or the Notification Log insert throws, the
+        # share must still succeed — the DocShare row has already
+        # committed and the recipient already has access.
+        from trivena_sheets import api
+
+        self.trivena.sendmail.side_effect = RuntimeError("smtp dead")
+        # Should NOT raise. share.add must have already been called.
+        api.share_sheet("SH-1", "bob@example.com", write=0)
+        self.trivena.share.add.assert_called_once()
+        # And the failure was logged for observability.
+        self.trivena.log_error.assert_called_once()
+
+    def test_public_link_does_not_send_a_notification(self):
+        # Public access is now a flag on the Sheet (set_sheet_public), not a
+        # per-user grant — there's no recipient to email, so no notification
+        # should ever fire from flipping the public link on.
+        from trivena_sheets import api
+
+        api.set_sheet_public("SH-1", public=1)
+        self.trivena.sendmail.assert_not_called()

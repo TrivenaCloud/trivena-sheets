@@ -1,0 +1,122 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-05-14 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "sheets_data",
+  "head_seq",
+  "head_snapshot",
+  "trashed",
+  "trashed_on",
+  "trashed_by",
+  "is_public",
+  "public_write"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sheets_data",
+   "fieldtype": "JSON",
+   "label": "Sheets Data"
+  },
+  {
+   "fieldname": "head_seq",
+   "fieldtype": "Long Int",
+   "label": "Head op-log seq",
+   "default": "0",
+   "description": "Highest op-log seq applied to the live sheets_data blob."
+  },
+  {
+   "fieldname": "head_snapshot",
+   "fieldtype": "Link",
+   "options": "Sheet Snapshot",
+   "label": "Latest snapshot"
+  },
+  {
+   "fieldname": "trashed",
+   "fieldtype": "Check",
+   "label": "Trashed",
+   "default": "0",
+   "in_standard_filter": 1,
+   "description": "Soft-delete flag. Trashed sheets are hidden from the app and purged after the retention window."
+  },
+  {
+   "fieldname": "trashed_on",
+   "fieldtype": "Datetime",
+   "label": "Trashed On",
+   "read_only": 1,
+   "depends_on": "trashed"
+  },
+  {
+   "fieldname": "trashed_by",
+   "fieldtype": "Link",
+   "options": "User",
+   "label": "Trashed By",
+   "read_only": 1,
+   "depends_on": "trashed"
+  },
+  {
+   "fieldname": "is_public",
+   "fieldtype": "Check",
+   "label": "Anyone with the link can view",
+   "default": "0",
+   "description": "When set, anyone with the link can open this sheet read-only — no login required."
+  },
+  {
+   "fieldname": "public_write",
+   "fieldtype": "Check",
+   "label": "Anyone with the link can edit",
+   "default": "0",
+   "depends_on": "is_public",
+   "description": "When set (and is_public is on), any signed-in user with the link can edit this sheet, not just view it. Guests remain view-only."
+  }
+ ],
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "asif@trivena.io",
+ "module": "Sheets",
+ "name": "Sheet",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "if_owner": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

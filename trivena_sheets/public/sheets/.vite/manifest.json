@@ -1,0 +1,109 @@
+{
+  "_TooltipBubble.DF9TWv4P.js": {
+    "file": "TooltipBubble.DF9TWv4P.js",
+    "name": "TooltipBubble",
+    "imports": [
+      "_vue.runtime.esm-bundler.BvsPPvdo.js"
+    ]
+  },
+  "_echarts.BloUSzra.js": {
+    "file": "echarts.BloUSzra.js",
+    "name": "echarts",
+    "imports": [
+      "_vue.runtime.esm-bundler.BvsPPvdo.js"
+    ]
+  },
+  "_vue.runtime.esm-bundler.BvsPPvdo.js": {
+    "file": "vue.runtime.esm-bundler.BvsPPvdo.js",
+    "name": "vue.runtime.esm-bundler"
+  },
+  "index.html": {
+    "file": "index.D6pUJN5_.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler.BvsPPvdo.js",
+      "_TooltipBubble.DF9TWv4P.js"
+    ],
+    "dynamicImports": [
+      "node_modules/xlsx/xlsx.mjs",
+      "src/pages/SheetEditor/ChartView.vue",
+      "node_modules/@sentry/vue/build/esm/index.js"
+    ],
+    "css": [
+      "index.Cjia8qdo.css"
+    ],
+    "assets": [
+      "Inter.var.C9xDBOS3.woff2",
+      "Inter-Italic.var.BGHziHgI.woff2"
+    ]
+  },
+  "node_modules/@sentry/vue/build/esm/index.js": {
+    "file": "esm.Bezaw5-N.js",
+    "name": "esm",
+    "src": "node_modules/@sentry/vue/build/esm/index.js",
+    "isDynamicEntry": true
+  },
+  "node_modules/frappe-ui/src/components/TextEditor/components/FontColor.vue": {
+    "file": "FontColor.D7eZAhVK.js",
+    "name": "FontColor",
+    "src": "node_modules/frappe-ui/src/components/TextEditor/components/FontColor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_vue.runtime.esm-bundler.BvsPPvdo.js"
+    ]
+  },
+  "node_modules/frappe-ui/src/components/TextEditor/extensions/iframe/InsertIframe.vue": {
+    "file": "InsertIframe.D5p9URFt.js",
+    "name": "InsertIframe",
+    "src": "node_modules/frappe-ui/src/components/TextEditor/extensions/iframe/InsertIframe.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_vue.runtime.esm-bundler.BvsPPvdo.js"
+    ]
+  },
+  "node_modules/frappe-ui/src/fonts/Inter/Inter-Italic.var.woff2": {
+    "file": "Inter-Italic.var.BGHziHgI.woff2",
+    "src": "node_modules/frappe-ui/src/fonts/Inter/Inter-Italic.var.woff2"
+  },
+  "node_modules/frappe-ui/src/fonts/Inter/Inter.var.woff2": {
+    "file": "Inter.var.C9xDBOS3.woff2",
+    "src": "node_modules/frappe-ui/src/fonts/Inter/Inter.var.woff2"
+  },
+  "node_modules/vue-echarts/dist/index.js": {
+    "file": "dist.COjxaoVx.js",
+    "name": "dist",
+    "src": "node_modules/vue-echarts/dist/index.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler.BvsPPvdo.js",
+      "_echarts.BloUSzra.js"
+    ]
+  },
+  "node_modules/xlsx/xlsx.mjs": {
+    "file": "xlsx.CvYVnNHh.js",
+    "name": "xlsx",
+    "src": "node_modules/xlsx/xlsx.mjs",
+    "isDynamicEntry": true
+  },
+  "src/pages/SheetEditor/ChartView.vue": {
+    "file": "ChartView.DZUI4KO8.js",
+    "name": "ChartView",
+    "src": "src/pages/SheetEditor/ChartView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_vue.runtime.esm-bundler.BvsPPvdo.js",
+      "_echarts.BloUSzra.js"
+    ],
+    "dynamicImports": [
+      "node_modules/vue-echarts/dist/index.js"
+    ],
+    "css": [
+      "ChartView.B7RaDaLv.css"
+    ]
+  }
+}
