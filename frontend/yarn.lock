@@ -3488,10 +3488,10 @@ vue-demi@>=0.13.0, vue-demi@>=0.14.8:
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.10.tgz"
   integrity sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==
 
-vue-echarts@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.npmjs.org/vue-echarts/-/vue-echarts-8.0.1.tgz"
-  integrity sha512-23rJTFLu1OUEGRWjJGmdGt8fP+8+ja1gVgzMYPIPaHWpXegcO1viIAaeu2H4QHESlVeHzUAHIxKXGrwjsyXAaA==
+vue-echarts@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/vue-echarts/-/vue-echarts-8.1.0.tgz#0ad32280dab5c7858aa3dd19e9faf1dd0feb38db"
+  integrity sha512-/uJVwijy3M2vIZ0NcPDgdZVqgboc6zZtC/vERfESau0eFpkHOIujj0sIiMiLP4kztQrckMFnDYWrid+gLI+IOg==
 
 vue-router@4:
   version "4.6.4"
